@@ -45,14 +45,15 @@ struct B : public A {
 };
 
 int main(int argc, char **argv) {
-    X x = X(1);
+    X x = X(1);//这是右值,在c++17 后直接拷贝消除,目标位置构造，跳过临时对象和复制
     A a = A(2);
     B b = B(3);
 
     // TODO: 补全三个类型的大小
-    static_assert(sizeof(X) == ?, "There is an int in X");
-    static_assert(sizeof(A) == ?, "There is an int in A");
-    static_assert(sizeof(B) == ?, "B is an A with an X");
+    static_assert(sizeof(X) == sizeof(int), "There is an int in X");
+    static_assert(sizeof(A) == sizeof(int), "There is an int in A");
+    static_assert(sizeof(B) == 2*sizeof(int)
+    , "B is an A with an X");
 
     i = 0;
     std::cout << std::endl
@@ -67,7 +68,7 @@ int main(int argc, char **argv) {
     // THINK: 观察打印出的信息，推测把大象放进冰箱分几步？
     // THINK: 这样的代码是“安全”的吗？
     // NOTICE: 真实场景中不太可能出现这样的代码
-
+//析构顺序：自身 → 成员变量 → 基类（与构造相反）
     i = 0;
     std::cout << std::endl
               << "-------------------------" << std::endl
